@@ -5,12 +5,12 @@ use crate::types::*;
 
 pub fn determine_sections(
     geom: &RectGeometry,
-    all_sections: &HashMap<String, Section>,
-) -> HashSet<String> {
-    let mut in_sections: HashSet<String> = HashSet::new();
+    all_sections: &HashMap<u32, Section>,
+) -> HashSet<u32> {
+    let mut in_sections: HashSet<u32> = HashSet::new();
     for (section_id, section) in all_sections {
         if section.geom.overlaps(geom) {
-            in_sections.insert(section_id.to_string());
+            in_sections.insert(*section_id);
         }
     }
     in_sections
@@ -29,7 +29,7 @@ where
 }
 pub fn to_nice_string(input: Option<&str>) -> String {
     let Some(input) = input else {
-        println!("Waring: Unnamed object");
+        println!("Warning: Unnamed element");
         return "Unnamed".to_string();
     };
     // Step 1: Decode XML entities: &lt; -> <, &gt; -> >, etc.

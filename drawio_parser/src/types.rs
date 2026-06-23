@@ -18,9 +18,9 @@ impl RectGeometry {
             && self.x + self.width > other.x
             && self.y < other.y + other.height
             && self.y + self.height > other.y;
-        println!("overlaps: {overlaps}");
-        println!("{self:?}");
-        println!("{other:?}");
+        // println!("overlaps: {overlaps}");
+        // println!("{self:?}");
+        // println!("{other:?}");
         overlaps
     }
 }
@@ -42,48 +42,79 @@ pub enum VertexOrEdge {
 /// xml element: mxCell
 #[derive(Debug, Clone, Serialize)]
 pub struct Cell {
-    pub id: String,
+    /// unique id of drawio element
+    pub id: u32,
+    /// html that renders to text visible in drawio
     pub value: Option<String>,
+    pub oneline_name: Option<String>,
     pub style: Option<String>,
     pub vertex_or_edge: VertexOrEdge,
-    pub source: Option<String>,
-    pub target: Option<String>,
-    pub parent: Option<String>,
+    /// edge connects to cell with source_id
+    pub source_id: Option<u32>,
+    /// edge connects to cell with target_id
+    pub target_id: Option<u32>,
+    pub parent_id: Option<u32>,
     pub geometry: Option<RectGeometry>,
+    /// Attribues of the surrounding object tag e.g.  section_marker="recovery" id="2"
     pub object: Option<HashMap<String, String>>,
 }
 
 #[derive(Debug)]
 pub struct Board {
-    pub main_cell_id: Option<String>,
+    /// unique id of drawio element
+    pub main_cell_id: Option<u32>,
+    /// visible text without linebreaks
     pub oneline_name: String,
     // id -> connector_id
-    pub connectors_id: HashSet<String>,
-    pub in_sections: HashSet<String>,
+    pub connectors_id: HashSet<u32>,
+    pub in_sections: HashSet<u32>,
 }
 
 pub struct Section {
-    pub id: String,
+    /// unique id of drawio element
+    pub id: u32,
     pub name: String,
     pub geom: RectGeometry,
 }
 
 pub struct Connector {
-    pub id: String,
+    /// unique id of drawio element
+    pub id: u32,
+    /// visible text without linebreaks
     pub oneline_name: String,
     pub kind: Option<String>,
-    pub board_id: String,
+    pub board_id: u32,
 }
 
 pub struct Harness {
-    pub id: String,
+    /// unique id of drawio element
+    pub id: u32,
     /// length in mm
     pub length: Option<u32>,
+    /// harness_kind
     pub kind: Option<String>,
 }
 
 pub struct Interconnect {
-    pub id: String,
+    /// unique id of drawio element
+    pub id: u32,
+    /// visible text without linebreaks
     pub oneline_name: String,
-    pub in_sections: HashSet<String>,
+    pub in_sections: HashSet<u32>,
+}
+
+pub struct Sensor {
+    /// unique id of drawio element
+    pub id: u32,
+    /// visible text without linebreaks
+    pub oneline_name: String,
+    pub in_section: HashSet<u32>,
+}
+
+pub struct Actor {
+    /// unique id of drawio element
+    pub id: u32,
+    /// visible text without linebreaks
+    pub oneline_name: String,
+    pub in_section: HashSet<u32>,
 }
